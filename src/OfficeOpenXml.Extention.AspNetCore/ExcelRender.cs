@@ -11,7 +11,7 @@ namespace OfficeOpenXml.Extention.AspNetCore
         private readonly ExcelPackage _excelPackage;
         public ExcelRender(string templateFile)
         {
-            _templateFile = templateFile ?? throw new Exception(string.Format("File \"{0}\" does not exist", templateFile));
+            _templateFile = templateFile ?? throw new Exception($"File \"{templateFile}\" does not exist");
             _excelPackage = new ExcelPackage(new FileInfo(_templateFile));
         }
 
@@ -22,8 +22,8 @@ namespace OfficeOpenXml.Extention.AspNetCore
             ExcelWorksheets worksheets = _excelPackage.Workbook.Worksheets;
             foreach (ExcelWorksheet sheet in worksheets)
             {
-                ExcelInterpreter excleInterpreter = new ExcelInterpreter(sheet);
-                excleInterpreter.Complie(KeyValues);
+                ExcelInterpreter excelInterpreter = new ExcelInterpreter(sheet);
+                excelInterpreter.Complie(KeyValues);
             }
             _excelPackage.SaveAs(new FileInfo(outputFile));
             Process.Start(outputFile);

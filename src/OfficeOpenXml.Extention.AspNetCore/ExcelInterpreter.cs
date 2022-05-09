@@ -62,10 +62,7 @@ namespace OfficeOpenXml.Extention.AspNetCore
                 string text = _sheet.Cells[interpRow, 1].Text.Trim();
                 if (string.IsNullOrWhiteSpace(text))
                 {
-                    int fromRow = interpRow;
-                    int num = outputRow;
-                    outputRow = num + 1;
-                    SetRow(fromRow, num, data);
+                    SetRow(interpRow, outputRow++, data);
                     interpRow++;
                 }
                 else
@@ -75,56 +72,49 @@ namespace OfficeOpenXml.Extention.AspNetCore
                     {
                         string value = regExp.Match(text2).Value;
                         interpChar += value.Length;
-                        int num2 = value.IndexOf('(');
-                        int num3 = value.LastIndexOf(')');
-                        string text3 = value.Substring(0, num2).Trim();
-                        string text4 = value.Substring(num2 + 1, num3 - num2 - 1);
-                        string a = text3;
-                        if (!(a == "for"))
+                        int num = value.IndexOf('(');
+                        int num2 = value.LastIndexOf(')');
+                        string text3 = value.Substring(0, num).Trim();
+                        string text4 = value.Substring(num + 1, num2 - num - 1);
+                        string text5 = text3;
+                        if (text5 != "for")
                         {
-                            throw new Exception(string.Format("Unknown expression: {0}", text3));
+                            throw new Exception($"Unknown expression: {text3}");
                         }
-                        IEnumerable<string> source = from m in text4.Split(new string[]
-                        {
-                            " in "
-                        }, 2, StringSplitOptions.RemoveEmptyEntries)
-                                                     select m.Trim();
+                        var source = from m in text4.Split(new []{ " in " }, 2, StringSplitOptions.RemoveEmptyEntries) select m.Trim();
                         if (source.Count() != 2)
                         {
                             throw new Exception("Invalid expression：" + text4);
                         }
-                        string[] source2 = source.First().Split(new char[]
-                        {
-                            ','
-                        });
+                        string[] source2 = source.First().Split(',');
                         string key = source2.First();
-                        string text5 = source2.ElementAtOrDefault(1);
-                        IEnumerable enumerable = GetValue(source.ElementAt(1), data) as IEnumerable;
+                        string text6 = source2.ElementAtOrDefault(1);
+                        var enumerable = GetValue(source.ElementAt(1), data) as IEnumerable;
                         if (enumerable == null)
                         {
-                            throw new Exception(string.Format("{0} can not be Enumerated", source.ElementAt(1)));
+                            throw new Exception($"{source.ElementAt(1)} can not be Enumerated");
                         }
-                        int num4 = interpRow;
-                        int num5 = interpChar;
-                        int num6 = 1;
-                        foreach (object value2 in enumerable)
+                        int num3 = interpRow;
+                        int num4 = interpChar;
+                        int num5 = 1;
+                        foreach (object item in enumerable)
                         {
-                            data.Add(key, value2);
-                            if (!string.IsNullOrWhiteSpace(text5))
+                            data.Add(key, item);
+                            if (!string.IsNullOrWhiteSpace(text6))
                             {
-                                data.Add(text5, num6);
+                                data.Add(text6, num5);
                             }
-                            interpRow = num4;
-                            interpChar = num5;
+                            interpRow = num3;
+                            interpChar = num4;
                             Run(data);
                             data.Remove(key);
-                            if (!string.IsNullOrWhiteSpace(text5))
+                            if (!string.IsNullOrWhiteSpace(text6))
                             {
-                                data.Remove(text5);
+                                data.Remove(text6);
                             }
-                            num6++;
+                            num5++;
                         }
-                        if (num6 == 1)
+                        if (num5 == 1)
                         {
                             interpRow++;
                             interpChar = 0;
@@ -137,10 +127,7 @@ namespace OfficeOpenXml.Extention.AspNetCore
                         {
                             if (regDisplay.IsMatch(text2))
                             {
-                                int fromRow2 = interpRow;
-                                int num = outputRow;
-                                outputRow = num + 1;
-                                SetRow(fromRow2, num, data);
+                                SetRow(interpRow, outputRow++, data);
                             }
                             interpChar += regBlockStart.Match(text2).Value.Length;
                         }
@@ -150,17 +137,14 @@ namespace OfficeOpenXml.Extention.AspNetCore
                             {
                                 if (regDisplay.IsMatch(text))
                                 {
-                                    int fromRow3 = interpRow;
-                                    int num = outputRow;
-                                    outputRow = num + 1;
-                                    SetRow(fromRow3, num, data);
+                                    SetRow(interpRow, outputRow++, data);
                                 }
                                 interpChar += regBlockEnd.Match(text2).Value.Length;
                                 break;
                             }
                             if (!string.IsNullOrWhiteSpace(text2))
                             {
-                                throw new Exception(string.Format("Invalid expression: {0}", text2));
+                                throw new Exception($"Invalid expression: {text2}");
                             }
                             interpChar = 0;
                             interpRow++;
@@ -172,12 +156,12 @@ namespace OfficeOpenXml.Extention.AspNetCore
 
         private void SetRow(int fromRow, int newRow, Dictionary<string, object> data)
         {
-            Console.WriteLine(string.Format("Rending line {0} to line {1}", fromRow, newRow));
+            Console.WriteLine($"Rending line {fromRow} to line {newRow}");
             _sheet.InsertRow(newRow, 1, fromRow);
             _sheet.Row(newRow).Height = _sheet.Row(fromRow).Height;
             for (int i = 2; i <= _columns; i++)
             {
-                Console.WriteLine(string.Format("Cell {0}{1}", ((char)(65 + i)).ToString(), fromRow));
+                Console.WriteLine($"Cell {(char)(65 + i)}{fromRow}");
                 string text = _sheet.MergedCells[fromRow, i];
                 if (text != null)
                 {
@@ -185,8 +169,8 @@ namespace OfficeOpenXml.Extention.AspNetCore
                     ExcelRange merCel = _sheet.Cells[excelAddress.Start.Row + (newRow - fromRow), excelAddress.Start.Column, excelAddress.End.Row + (newRow - fromRow), excelAddress.End.Column];
                     if (!merCel.Merge)
                     {
-                        Console.WriteLine(string.Format("Merge cell {0}", merCel.ToString()));
-                        if (!_mergedRegions.Any((a) => a.Address == merCel.Address))
+                        Console.WriteLine($"Merge cell {merCel}");
+                        if (!_mergedRegions.Any(a => a.Address == merCel.Address))
                         {
                             _mergedRegions.Add(merCel);
                         }
@@ -219,26 +203,20 @@ namespace OfficeOpenXml.Extention.AspNetCore
 
         private object ReplaceParam(string name, Dictionary<string, object> data)
         {
-            MatchCollection source = regReplace.Matches(name);
-            IEnumerable<string> enumerable = (from Match m in source
-                                              select m.Value).Distinct();
-            object result;
+            var source = regReplace.Matches(name);
+            var enumerable = (from Match m in source select m.Value).Distinct();
             if (enumerable.Count() == 1 && enumerable.First().Length == name.Length)
             {
                 string text = enumerable.First();
-                result = ExecExpression(text.Substring(1, text.Length - 2), data);
+                return ExecExpression(text.Substring(1, text.Length - 2), data);
             }
-            else
+            foreach (string item in enumerable)
             {
-                foreach (string text2 in enumerable)
-                {
-                    string expression = text2.Substring(1, text2.Length - 2);
-                    object obj = ExecExpression(expression, data);
-                    name = name.Replace(text2, obj.ToString());
-                }
-                result = name;
+                string expression = item.Substring(1, item.Length - 2);
+                object obj = ExecExpression(expression, data);
+                name = name.Replace(item, obj.ToString());
             }
-            return result;
+            return name;
         }
 
         private object ExecExpression(string expression, Dictionary<string, object> data)
@@ -248,11 +226,8 @@ namespace OfficeOpenXml.Extention.AspNetCore
 
         private object GetValue(string name, Dictionary<string, object> data)
         {
-            object obj = null;
-            string[] source = name.Split(new char[]
-            {
-                '.'
-            });
+            string[] source = name.Split('.');
+            object obj;
             try
             {
                 obj = data[source.First()];
@@ -261,12 +236,12 @@ namespace OfficeOpenXml.Extention.AspNetCore
             {
                 throw new Exception("Variable not found：" + source.First());
             }
-            foreach (string text in source.Skip(1))
+            foreach (string item in source.Skip(1))
             {
-                PropertyInfo property = obj.GetType().GetProperty(text);
+                PropertyInfo property = obj.GetType().GetProperty(item);
                 if (property == null)
                 {
-                    throw new Exception(string.Format("Type \"{0}\" does not contains member: {1}", obj.GetType().Name, text));
+                    throw new Exception($"Type \"{obj.GetType().Name}\" does not contains member: {item}");
                 }
                 obj = property.GetValue(obj, null);
             }

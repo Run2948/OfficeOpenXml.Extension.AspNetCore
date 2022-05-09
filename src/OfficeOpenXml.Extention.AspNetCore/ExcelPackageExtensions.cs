@@ -46,8 +46,8 @@ namespace OfficeOpenXml.Extention.AspNetCore
 
         public static void FillModel(this ExcelWorksheet sheet, object model)
         {
-            ExcelInterpreter exlInterpreter = new ExcelInterpreter(sheet);
-            exlInterpreter.Complie(new Dictionary<string, object>
+            ExcelInterpreter excelInterpreter = new ExcelInterpreter(sheet);
+            excelInterpreter.Complie(new Dictionary<string, object>
             {
                 {
                     "model",
