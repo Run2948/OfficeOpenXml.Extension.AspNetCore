@@ -13,7 +13,7 @@
 		<RepositoryUrl>https://github.com/Run2948/OfficeOpenXml.Extension.AspNetCore</RepositoryUrl>
 		<GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
 		<Copyright>Copyright © Run2948</Copyright>
-		<NeutralLanguage>zh-Hans-CN</NeutralLanguage>
+		<NeutralLanguage>zh-Hans</NeutralLanguage>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<Version>1.0.0</Version>
