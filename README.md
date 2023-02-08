@@ -1,6 +1,6 @@
-# OfficeOpenXml.Extention.AspNetCore
+# OfficeOpenXml.Extension.AspNetCore
 
-OfficeOpenXml.Extention.AspNetCore 是一个基于 OfficeOpenXml 拓展，它依赖于 [EPPlus](https://www.nuget.org/packages/EPPlus/5.0.3)，用于根据模板输出 Excel。
+OfficeOpenXml.Extension.AspNetCore 是一个基于 OfficeOpenXml 拓展，它依赖于 [EPPlus](https://www.nuget.org/packages/EPPlus/5.0.3)，用于根据模板输出 Excel。
 
 **注意：** 由于 Excel 2003 版本 和 2007 之后版本文件结构的差异性，当前扩展无法同时兼容两种模式，仅支持 *.xlsx 文件！！！
 
@@ -8,10 +8,10 @@ OfficeOpenXml.Extention.AspNetCore 是一个基于 OfficeOpenXml 拓展，它依
 
 ### 1. 安装组件 
 
-* [OfficeOpenXml.Extention.AspNetCore](https://www.nuget.org/packages/OfficeOpenXml.Extention.AspNetCore)
+* [OfficeOpenXml.Extension.AspNetCore](https://www.nuget.org/packages/OfficeOpenXml.Extension.AspNetCore)
 
 ``` bash
-dotnet add package OfficeOpenXml.Extention.AspNetCore
+dotnet add package OfficeOpenXml.Extension.AspNetCore
 ```
 
 ### 2.使用组件
@@ -139,7 +139,7 @@ dotnet add package OfficeOpenXml.Extention.AspNetCore
   * 输出内容目前仅支持基础的变量、成员，不支持方法、运算等高级特性；控制代码目前仅支持 for 循环、嵌套 for 循环以及索引，使用索引时需要注意索引计数从1开始，因为excel中通常序号从1开始。
   * 输出公式的功能用 @= 开头便于程序识别，解析时会将 @ 去掉，后面的内容对 {...} 进行解释并替换。R[-4]表示相对值-4行，R[-1]表示相对值-1行，C后面没有 [] 表示当前列。
   * 具体细节可以进一步参考案例代码：
-    * [Test](./samples/Test/Program.cs)
+    * [ConsoleApp1](./samples/net45/Program.cs)
     * [OfficeOpenXmlSample](./samples/OfficeOpenXmlSample/Controllers/ExcelController.cs)
 
 ### 鸣谢

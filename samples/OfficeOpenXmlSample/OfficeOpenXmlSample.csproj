@@ -11,7 +11,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\OfficeOpenXml.Extention.AspNetCore\OfficeOpenXml.Extention.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\OfficeOpenXml.Extention.AspNetCore\OfficeOpenXml.Extension.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

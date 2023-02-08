@@ -1,5 +1,5 @@
 ﻿using OfficeOpenXml;
-using OfficeOpenXml.Extends;
+using OfficeOpenXml.Extension.AspNetCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Test
+namespace ConsoleApp1
 {
     internal class Program
     {
         static void Main(string[] args)
         {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
             FileInfo info = new FileInfo("tpl.xlsx");
             ExcelPackage packet = new ExcelPackage(info);
             var book = packet.Workbook;
@@ -44,7 +46,6 @@ namespace Test
                 })
             };
 
-            //下面的FillModel就是OfficeOpenXml.Extends提供的拓展方法, 1.0.1.0也就只有这个拓展方法
             book.Worksheets.First().FillModel(model);
 
             packet.SaveAs(new FileInfo(DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx"));

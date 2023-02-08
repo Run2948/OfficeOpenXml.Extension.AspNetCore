@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
-using OfficeOpenXml.Extention.AspNetCore;
+using OfficeOpenXml.Extension.AspNetCore;
 using OfficeOpenXmlSample.Models;
 
 namespace OfficeOpenXmlSample.Controllers

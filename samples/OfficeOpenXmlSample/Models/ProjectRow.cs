@@ -1,4 +1,4 @@
-﻿using OfficeOpenXml.Extention.AspNetCore.Attributes;
+﻿using OfficeOpenXml.Extension.AspNetCore.Attributes;
 
 namespace OfficeOpenXmlSample.Models
 {
